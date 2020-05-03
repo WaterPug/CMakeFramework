@@ -19,6 +19,7 @@ include(cmake/Conan.cmake)
 run_conan()
 
 # Test code
+enable_testing()
 add_subdirectory(tests)
 
 # Main code
