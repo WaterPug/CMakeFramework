@@ -1,27 +1,21 @@
 image:
-- Visual Studio 2017
-- Visual Studio 2019
-clone_folder: c:\projects\source
-configuration:
-- Debug
-- Release
-platform:
-- x64
+  - Visual Studio 2019
 
-init:
-- echo %APPVEYOR_BUILD_WORKER_IMAGE%
-- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" ( set generator="Visual Studio 15 2017 Win64" )
-- if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( set generator="Visual Studio 16 2019" )
-- echo %generator%
-  
+clone_folder: c:\projects\source
+
 build_script:
 - cmd: >-
     mkdir build
-    cd build
-    pip install --user conan
-    set PATH=%PATH%;C:\Users\appveyor\AppData\Roaming\Python\Scripts
-    cmake c:\projects\source -G %generator%
-    cmake --build .
     
+    cd build
+    
+    pip install --user conan
+    
+    set PATH=%PATH%;C:\Users\appveyor\AppData\Roaming\Python\Scripts
+    
+    cmake c:\projects\source -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE:STRING=Release
+    
+    cmake --build . --config "Release"
+
 test_script:
 - cmd: ctest -C Debug
