@@ -16,7 +16,6 @@ conan_add_remote(NAME bincrafters URL
 conan_cmake_run(
   REQUIRES
   catch2/2.11.1
-  fmt/6.0.0
   spdlog/1.5.0
   BASIC_SETUP
   CMAKE_TARGETS # individual targets to link to
