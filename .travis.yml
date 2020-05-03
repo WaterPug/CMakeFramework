@@ -1,0 +1,44 @@
+language: cpp
+install:
+  - pip install --user conan cmake
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      env:
+        - USE_CC=/usr/bin/gcc-8
+        - USE_CXX=/usr/bin/g++-8
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+            - gcc-8
+    
+    - os: linux
+      dist: xenial
+      env: 
+        - USE_CC=/usr/bin/clang-6.0
+        - USE_CXX=/usr/bin/clang++-6.0
+      addons:
+        apt:
+          sources: 
+            - ubuntu-toolchain-r-test
+          packages:
+            - clang-6.0
+    
+before_install:
+  # Override compilers set by Travis
+  - if [ ! -z "${USE_CC}" ]; then echo "Override CC=${USE_CC}"; eval "CC=${USE_CC}"; fi
+  - if [ ! -z "${USE_CXX}" ]; then echo "Override CXX=${USE_CXX}"; eval "CXX=${USE_CXX}"; fi
+  - echo ${CC} && ${CC} --version
+  - echo ${CXX} && ${CXX} --version
+    
+script:
+  # Build Debug/Release
+  - (mkdir -p build-debug/ && cd build-debug && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=~/.local/ .. && cmake --build . )
+  - (mkdir -p build-release/ && cd build-release && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/ .. && cmake --build . )
+
+    
